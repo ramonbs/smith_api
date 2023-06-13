@@ -1,0 +1,36 @@
+version: "3.1"
+
+services:
+  app-trybesmith:
+    build: .
+    user: node
+    container_name: trybesmith_api
+    tty: true
+    stdin_open: true
+    command: npm run dev
+    image: trybesmith-api:8.5
+    restart: always
+
+    volumes:
+
+      - ./:/app
+    depends_on:
+      - db
+    ports:
+      - 3001:3001
+    environment:
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: Trybesmith
+      JWT_SECRET: secret
+
+  db:
+    container_name: trybesmith_db
+    image: mysql:8.0.32
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
